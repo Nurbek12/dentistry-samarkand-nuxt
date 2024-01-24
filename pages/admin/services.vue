@@ -120,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import { debounce } from 'lodash'
+import lodash from 'lodash'
 import type { Service } from '@/types'
 import { AkChevronRight, AkChevronLeft, ChEyeSlash, GlEye } from '@kalimahapps/vue-icons'
 
@@ -129,6 +129,7 @@ definePageMeta({
   middleware: process.client ? 'auth' : undefined,
 })
 
+const { debounce } = lodash
 const search = ref('')
 const dialog = ref(false)
 const page = ref<number>(1)

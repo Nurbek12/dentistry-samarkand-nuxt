@@ -81,10 +81,11 @@
 </template>
 
 <script setup lang="ts">
-import { debounce } from 'lodash'
+import lodash from 'lodash'
 import type { Appointment } from '@/types'
 import { AkChevronRight, AkChevronLeft } from '@kalimahapps/vue-icons'
 
+const { debounce } = lodash
 const search = ref('')
 const page = ref<number>(1)
 const count = ref<number>(0)
