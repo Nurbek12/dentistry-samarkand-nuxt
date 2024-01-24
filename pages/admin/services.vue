@@ -1,0 +1,260 @@
+<template>
+    <div class="w-full p-2">
+        <div class="p-2 rounded flex bg-white border justify-between items-center gap-2">
+            <div class="border rounded overflow-hidden w-full max-w-[300px]">
+                <input @input="searchItems" type="text" class="px-3 py-2 w-full text-sm outline-none" placeholder="Поиск">
+            </div>
+            <button @click="dialog=true" class="bg-purple-600 hover:bg-purple-500 text-white rounded text-xs px-3 py-2">Добавить</button>
+        </div>
+        <div class="border overflow-hidden w-full rounded mt-2">
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Иконок
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Название
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Цена
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Описание
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Управлять
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-show="items.length===0">
+                            <td class="px-3 py-2 text-center bg-white border-b" colspan="5">
+                                <span class="text-gray-600">Пусто</span>
+                            </td>
+                        </tr>
+                        <tr v-for="item,i in items" :key="i" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="w-[40px] h-[40px] bg-purple-600/10 p-1 rounded overflow-hidden">
+                                    <img :src="item.icon||'/icons/crown.png'" alt="">
+                                </div>
+                            </th>
+                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <span class="text-xs text-balance">{{ item.title }}</span>
+                            </th>
+                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <span class="text-xs">{{ item.price }}</span>
+                            </th>
+                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <span class="text-xs text-balance">{{ item.description }}</span>
+                            </th>
+                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="flex gap-1">
+                                    <button @click="update(i, { id: item.id, publish: !item.publish })" class="text-white text-xs px-3 py-2 rounded" :class="item.publish?'bg-green-500 hover:bg-green-400':'bg-red-500 hover:bg-red-400'">
+                                        <GlEye v-show="item.publish" class="w-4 h-4" />
+                                        <ChEyeSlash v-show="!item.publish" class="w-4 h-4" />
+                                    </button>
+                                    <button @click="editItem(item, i)" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
+                                    <button @click="deleteItem(item.id!, i)" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
+                                </div>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="py-2 flex items-center justify-between">
+            <div class="border rounded overflow-hidden w-full max-w-[100px]">
+                <select v-model="limit" @change="getItems()" class="px-3 py-2 w-full bg-white text-sm outline-none" placeholder="Поиск">
+                    <option :value="20" selected>20</option>
+                    <option :value="50">50</option>
+                    <option :value="100">100</option>
+                </select>
+            </div>
+            <div class="border rounded flex items-center justify-between gap-4 bg-white p-2">
+                <span class="text-sm">{{ perpagetext }}</span>
+                <div class="flex items-center gap-2">
+                    <button :disabled="page===1" @click="page--,getItems()" class="disabled:bg-purple-300 bg-purple-600 hover:bg-purple-500 text-white text-xs p-3 rounded-full">
+                        <AkChevronLeft />
+                    </button>
+                    <button :disabled="page >= Math.ceil(count / limit)" @click="page++,getItems()" class="disabled:bg-purple-300 bg-purple-600 hover:bg-purple-500 text-white text-xs p-3 rounded-full">
+                        <AkChevronRight />
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-dialog :title="itemIndex==null?'Добавить услугу':'Изменить услугу'" :open="dialog" @close-dialog="close">
+        <form @submit.prevent="save" class="mt-4 flex flex-col gap-4">
+            <div class="flex items-center justify-start">
+                <label for="file-input" class="cursor-pointer">
+                    <div class="w-[120px] h-[120px] border-2 hover:bg-purple-600/10 border-purple-600 p-1 overflow-hidden rounded-full">
+                        <img :src="currentImage" class="w-full rounded-full h-full object-cover" alt="">
+                    </div>
+                </label>
+            </div>
+            <div class="w-full border overflow-hidden rounded">
+                <input required v-model="service.title" class="text-sm px-3 py-2 w-full outline-none" type="text" placeholder="Название">
+            </div>
+            <div class="w-full border overflow-hidden rounded">
+                <input required v-model="service.title_uz" class="text-sm px-3 py-2 w-full outline-none" type="text" placeholder="Название (UZ)">
+            </div>
+            <div class="w-full border overflow-hidden rounded">
+                <input required v-model="service.price" class="text-sm px-3 py-2 w-full outline-none" type="number" min="0" placeholder="Цена">
+            </div>
+            <div class="w-full border overflow-hidden rounded">
+                <textarea required v-model="service.description" class="text-sm px-3 py-2 w-full outline-none resize-none" rows="4" type="text" placeholder="Описание" />
+            </div>
+            <div class="w-full border overflow-hidden rounded">
+                <textarea required v-model="service.description_uz" class="text-sm px-3 py-2 w-full outline-none resize-none" rows="4" type="text" placeholder="Описание (UZ)" />
+            </div>
+            <div class="w-full" hidden>
+                <input @change="onFileChange" id="file-input" accept="image/*" type="file" placeholder="Фото для ава">
+            </div>
+            <button :disabled="createLoading" type="submit" class="disabled:bg-purple-300 rounded bg-purple-600 hover:bg-purple-500 text-white text-sm px-3 py-2">
+                {{ createLoading?'Загружается':'Сохранить' }}
+            </button>
+        </form>
+    </app-dialog>
+</template>
+
+<script setup lang="ts">
+import { debounce } from 'lodash'
+import type { Service } from '@/types'
+import { AkChevronRight, AkChevronLeft, ChEyeSlash, GlEye } from '@kalimahapps/vue-icons'
+
+definePageMeta({
+  layout: 'admin-layout',
+  middleware: process.client ? 'auth' : undefined,
+})
+
+const search = ref('')
+const dialog = ref(false)
+const page = ref<number>(1)
+const file = ref<any>(null)
+const count = ref<number>(0)
+const limit = ref<number>(20)
+const items = ref<Service[]>([])
+const itemIndex = ref<number|null>(null)
+const createLoading = ref<boolean>(false)
+const service = reactive<Service>({
+    description: "",
+    title: "",
+    title_uz: "",
+    price: "",
+    description_uz: "",
+})
+
+const currentImage = computed(() => {
+    if(file.value) return URL.createObjectURL(file.value)
+    else if(itemIndex.value!==null) return items.value[itemIndex.value]?.icon || '/images/nophoto.jpg'
+    else return '/images/nophoto.jpg'
+})
+
+const qs = computed(() => {
+    const qry: any = {}
+
+    if (page.value) qry.page = page.value
+    if (limit.value) qry.limit = limit.value
+    if (search.value.trim()) qry.search = search.value
+
+    return qry
+})
+
+const perpagetext = computed(() => {
+    const page_1 = (page.value - 1) * limit.value;
+    return `${page_1 + 1}-${page_1 + items.value.length} / ${count.value}`
+})
+
+const searchItems = debounce((e: any) => {
+    search.value = e.target.value
+    page.value = 1
+    getItems()
+}, 500)
+
+const getItems = async () => {
+    const data = await $fetch(`/api/services`, {
+        params: qs.value
+    })
+    count.value = data.count
+    console.log(data.count)
+    items.value = data.result as any
+}
+
+const onFileChange = (e: any) => {
+  var files = e.target.files || e.dataTransfer.files;
+  if (!files.length) return file.value = null
+  return file.value = files[0]
+}
+
+const editItem = (item: Service, index: number) => {
+    Object.assign(service, item)
+    itemIndex.value = index
+    dialog.value = true
+}
+
+const deleteItem = async (id: number, index: number) => {
+    if(!confirm('Вы хотите удалить это?')) return
+    await $fetch(`/api/services/delete/${id}`, {
+        method: 'delete'
+    })
+    console.log('Deleted', id)
+    items.value.splice(index, 1)
+}
+
+const uploadImage = async (file: any) => {
+    const body = new FormData()
+    body.append('file', file)
+    return $fetch<{url: string, thumbnailUrl: string}>('/api/media/upload', {
+        method: 'post', body
+    })
+}
+
+const create = async (body: any) => {
+    const data = await $fetch('/api/services', {
+        method: 'POST',
+        body: JSON.stringify(body)
+    })
+    items.value.push(data as any)
+}
+
+const update = async (index: number, body: any) => {
+    const data = await $fetch(`/api/services/update/${body.id}`, {
+        method: 'put',
+        body: JSON.stringify(body)
+    })
+    Object.assign(items.value[index], data)
+}
+
+const save = async () => {
+    createLoading.value = true
+
+    if(file.value) {
+        const { url } = await uploadImage(file.value)
+        service.icon = url
+    }
+    
+    if(itemIndex.value !== null) update(itemIndex.value, service)
+        
+    else create(service)
+
+    createLoading.value = false
+    close()
+}
+
+const close = () => {
+    Object.assign(service, {
+        description: "",
+        title: "",
+        price: "",
+        description_uz: "",
+        title_uz: "",
+    })
+    file.value = null
+    dialog.value = false
+    itemIndex.value = null
+}
+
+getItems()
+</script>

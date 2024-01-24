@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Doctor {
+  id Int @id @default(autoincrement())
+  name String
+  image String?
+  thumb String?
+  specialty String
+  experience String
+  education String
+
+  phone String?
+  tg String
+  inst String
+  fb String
+  in String
+  publish Boolean @default(true)
+
+  appointments Appointment[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+}
+
+model Service {
+  id Int @id @default(autoincrement())
+  
+  icon String?
+  thumb String?
+  title String
+  title_uz String
+  description String
+  description_uz String
+  price Int
+  publish Boolean @default(true)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+}
+
+model FAQs {
+  id Int @id @default(autoincrement())
+  
+  title String
+  title_uz String?
+  content String?
+  content_uz String?
+  publish Boolean @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+}
+
+model Appointment {
+  id Int @id @default(autoincrement())
+
+  name String
+  phone String
+  doctorid Int?
+  doctor Doctor? @relation(references: [id], fields: [doctorid])
+  
+  check Boolean @default(false)
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+
+  firstname String
+  lastname String?
+  phone String?
+  email String?
+  message String
+  publish Boolean @default(false)
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+}
+
+model Admin {
+  id Int @id @default(autoincrement())
+  
+  login String
+  password String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+}
