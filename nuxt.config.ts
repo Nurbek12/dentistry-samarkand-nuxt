@@ -7,6 +7,10 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ['./store/**']
   },
+  sourcemap: {
+    client: true,
+    server: false
+  },
   css: ['./assets/css/tailwind.css'],
   i18n: {
     vueI18n: './i18n.config.ts'
