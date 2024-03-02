@@ -6,7 +6,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev --host 0.0.0.0",
     "start": "node ./.output/server/index.mjs",
-    "start:copy": "xcopy .\\prisma\\dev.db .\\.output\\server\\node_modules\\.prisma\\client\\",
+    "start:copy": "copy .\\prisma\\dev.db .\\.output\\server\\node_modules\\.prisma\\client\\",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
