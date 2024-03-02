@@ -29,6 +29,10 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  devServer: {
+    host: '0.0.0.0',
+    port: process.env.PORT as any
+  }
   // modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'shadcn-nuxt'],
   // shadcn: {
   //   prefix: '',
