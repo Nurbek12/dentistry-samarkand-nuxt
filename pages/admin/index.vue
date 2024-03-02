@@ -37,7 +37,7 @@ const tab_data = reactive<any>({})
 
 definePageMeta({
   layout: 'admin-layout',
-  middleware: process.client ? 'auth' : undefined,
+  middleware: ['auth'],
 })
 
 const init = async () => {

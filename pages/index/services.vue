@@ -2,7 +2,7 @@
     <div class="w-full">
         <div class="container px-2 md:px-8 py-16">
             <div class="text-center pt-20 pb-10">
-                <h1 class="font-medium text-purple-600 text-3xl">Наши услуги</h1>
+                <h1 class="font-medium text-teal-600 text-3xl">Наши услуги</h1>
                 <p class="text-base text-gray-600">
                     Наши Стоматологические Услуги - Заботимся о Здоровье Вашей Улыбки
                 </p>

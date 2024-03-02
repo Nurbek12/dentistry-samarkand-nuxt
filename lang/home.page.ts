@@ -16,6 +16,8 @@ export const uz = {
     send_appointment: "Qabulga yozilish",
 
     read_more: "Batafsil",
+
+    back: "Orqaga qaytish",
 }
 
 export const ru = {
@@ -36,4 +38,6 @@ export const ru = {
     send_appointment: "Записаться на прием",
 
     read_more: "Подробне",
+
+    back: "Возвращаться",
 }

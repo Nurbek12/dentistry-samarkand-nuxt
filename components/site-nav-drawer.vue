@@ -5,12 +5,12 @@
             <nuxt-link v-for="link,i in navigation_links"
                 :key="i" @click="$emit('close-drawer')"
                 :to="link.url" class="hover:underline" 
-                :class="{'text-purple-600 underline':route.path===link.url}">
+                :class="{'text-teal-600 underline':route.path===link.url}">
                     {{ link.title }}
             </nuxt-link>
             <div class="flex-1 flex flex-col justify-end">
                 <div class="flex justify-between items-center">
-                    <a href="#" v-for="s,i in social_links" :key="i" class="hover:text-purple-600 text-xl">
+                    <a href="#" v-for="s,i in social_links" :key="i" class="hover:text-teal-600 text-xl">
                         <component :is="s.icon" />
                     </a>
                 </div>

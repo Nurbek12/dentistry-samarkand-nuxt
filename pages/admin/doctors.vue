@@ -4,7 +4,7 @@
             <div class="border w-full rounded overflow-hidden max-w-[300px]">
                 <input @input="searchItems" type="text" class="px-3 py-2 w-full text-sm outline-none" placeholder="Поиск">
             </div>
-            <button @click="dialog=true" class="bg-purple-600 hover:bg-purple-500 text-white rounded text-xs px-3 py-2">Добавить</button>
+            <button @click="dialog=true" class="bg-teal-600 hover:bg-teal-500 text-white rounded text-xs px-3 py-2">Добавить</button>
         </div>
         <div class="border rounded overflow-hidden w-full mt-2">
             <div class="relative overflow-x-auto">
@@ -61,8 +61,8 @@
                                         <GlEye v-show="item.publish" class="w-4 h-4" />
                                         <ChEyeSlash v-show="!item.publish" class="w-4 h-4" />
                                     </button>
-                                    <button @click="editItem(item, i)" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
-                                    <button @click="deleteItem(item.id!, i)" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
+                                    <button @click="editItem(item, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
+                                    <button @click="deleteItem(item.id!, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
                                 </div>
                             </th>
                         </tr>
@@ -81,10 +81,10 @@
             <div class="border rounded flex items-center justify-between gap-4 bg-white p-2">
                 <span class="text-sm">{{ limit*(page-1)+1 }}-{{ limit*(page-1)+items.length }} / {{ count }}</span>
                 <div class="flex items-center gap-2">
-                    <button :disabled="page===1" @click="page--,getItems()" class="disabled:bg-purple-300 bg-purple-600 hover:bg-purple-500 text-white text-xs p-3 rounded-full">
+                    <button :disabled="page===1" @click="page--,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
                         <AkChevronLeft />
                     </button>
-                    <button :disabled="page >= Math.ceil(count / limit)" @click="page++,getItems()" class="disabled:bg-purple-300 bg-purple-600 hover:bg-purple-500 text-white text-xs p-3 rounded-full">
+                    <button :disabled="page >= Math.ceil(count / limit)" @click="page++,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
                         <AkChevronRight />
                     </button>
                 </div>
@@ -95,7 +95,7 @@
         <form @submit.prevent="save" class="mt-4 flex flex-col gap-4">
             <div class="flex items-center justify-start">
                 <label for="file-input" class="cursor-pointer">
-                    <div class="w-[120px] h-[120px] border-2 hover:bg-purple-600/10 border-purple-600 p-1 overflow-hidden rounded-full">
+                    <div class="w-[120px] h-[120px] border-2 hover:bg-teal-600/10 border-teal-600 p-1 overflow-hidden rounded-full">
                         <img :src="currentImage" class="w-full rounded-full h-full object-cover" alt="">
                     </div>
                 </label>
@@ -130,7 +130,7 @@
             <div class="w-full" hidden>
                 <input @change="onFileChange" id="file-input" accept="image/*" type="file" placeholder="Фото для ава">
             </div>
-            <button :disabled="createLoading" type="submit" class="disabled:bg-purple-400 bg-purple-600 hover:bg-purple-500  rounded text-white text-sm px-3 py-2">
+            <button :disabled="createLoading" type="submit" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500  rounded text-white text-sm px-3 py-2">
                 {{ createLoading?'Загружается':'Сохранить' }}
             </button>
         </form>
@@ -144,7 +144,7 @@ import { AkChevronRight, AkChevronLeft, ChEyeSlash, GlEye } from '@kalimahapps/v
 
 definePageMeta({
   layout: 'admin-layout',
-  middleware: process.client ? 'auth' : undefined,
+  middleware: ['auth'],
 })
 
 const { debounce } = lodash

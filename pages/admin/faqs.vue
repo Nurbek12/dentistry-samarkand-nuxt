@@ -36,9 +36,9 @@
                             </th>
                             <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <div class="flex gap-1">
-                                    <button @click="update(item.id!, i, { publish: !item.publish })" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-2 rounded">{{ item.publish?'Скрыть':'Публиковать' }}</button>
-                                    <button @click="editItem(item, i)" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
-                                    <button @click="deleteItem(item.id!, i)" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
+                                    <button @click="update(item.id!, i, { publish: !item.publish })" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">{{ item.publish?'Скрыть':'Публиковать' }}</button>
+                                    <button @click="editItem(item, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
+                                    <button @click="deleteItem(item.id!, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
                                 </div>
                             </th>
                         </tr>
@@ -57,10 +57,10 @@
             <div class="border rounded flex items-center justify-between gap-4 bg-white p-2">
                 <span class="text-sm">{{ limit*(page-1)+1 }}-{{ limit*(page-1)+items.length }} / {{ count }}</span>
                 <div class="flex items-center gap-2">
-                    <button :disabled="page===1" @click="page--,getItems()" class="disabled:bg-purple-300 bg-purple-600 hover:bg-purple-500 text-white text-xs p-3 rounded-full">
+                    <button :disabled="page===1" @click="page--,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
                         <AkChevronLeft />
                     </button>
-                    <button :disabled="page >= Math.ceil(count / limit)" @click="page++,getItems()" class="disabled:bg-purple-300 bg-purple-600 hover:bg-purple-500 text-white text-xs p-3 rounded-full">
+                    <button :disabled="page >= Math.ceil(count / limit)" @click="page++,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
                         <AkChevronRight />
                     </button>
                 </div>
@@ -81,7 +81,7 @@
             <div class="w-full border overflow-hidden rounded">
                 <textarea required v-model="faqs.content_uz" class="text-sm py-2 px-3 w-full outline-none resize-none" rows="4" type="text" placeholder="Описание (UZ)" />
             </div>
-            <button :disabled="createLoading" type="submit" class="bg-purple-600 hover:bg-purple-500 text-white text-sm px-3 py-2 rounded">
+            <button :disabled="createLoading" type="submit" class="bg-teal-600 hover:bg-teal-500 text-white text-sm px-3 py-2 rounded">
                 {{ createLoading?'Загружается':'Сохранить' }}
             </button>
         </form>
@@ -90,14 +90,15 @@
 
 <script setup lang="ts">
 import type { FAQs } from '@/types'
-import { debounce } from 'lodash'
+import lodash from 'lodash'
 import { AkChevronRight, AkChevronLeft } from '@kalimahapps/vue-icons'
 
 definePageMeta({
   layout: 'admin-layout',
-  middleware: process.client ? 'auth' : undefined,
+  middleware: ['auth'],
 })
 
+const { debounce } = lodash
 const search = ref('')
 const dialog = ref(false)
 const page = ref<number>(1)

@@ -3,7 +3,7 @@
     <div v-if="open" @click="$emit('close-dialog')" class="fixed p-4 flex items-center z-50 justify-center w-full h-full inset-0 bg-black/20 backdrop-blur-sm transition">
       <div class="bg-white rounded border p-4 overflow-auto max-w-[500px] max-h-[95vh] w-full" @click.stop>
         <div class="flex justify-between items-center">
-          <h1 class="text-purple-600 font-normal text-xl">{{ props.title || 'App Dialog' }}</h1>
+          <h1 class="text-teal-800 font-normal text-xl">{{ props.title || 'App Dialog' }}</h1>
           <button @click="$emit('close-dialog')" aria-label="close" aria-labelledby="close-dialog">
             <GlClose class="w-6 h-6 text-red-500" />
           </button>

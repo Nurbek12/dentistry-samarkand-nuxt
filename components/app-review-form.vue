@@ -9,7 +9,7 @@
                 placeholder="Телефон">
         </div>
         <button type="submit"
-            class="bg-purple-600 rounded hover:bg-purple-500 text-white text-sm px-3 py-2">Отправить</button>
+            class="bg-teal-600 rounded hover:bg-teal-500 text-white text-sm px-3 py-2">Отправить</button>
     </form>
 </template>
 

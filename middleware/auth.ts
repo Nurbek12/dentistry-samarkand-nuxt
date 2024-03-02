@@ -1,9 +1,7 @@
-import { useAppStore } from "@/store/app.store"
-
 export default defineNuxtRouteMiddleware((to, from) => {
-    const { isLogged } = useAppStore()
-    console.log(isLogged)
-    if(!isLogged) {
+    const token = useAuthData()
+
+    if(!token.value) {
         navigateTo('/login', { external: true })
     }
 })

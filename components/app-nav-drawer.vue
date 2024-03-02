@@ -3,7 +3,7 @@
         <div class="p-2 flex flex-col gap-1">
             <nuxt-link v-for="link, i in admin_links" :key="i" :to="link.url">
                 <div class="px-2 py-2 rounded w-full overflow-hidden flex whitespace-nowrap items-center gap-6 transition-all"
-                    :class="current_router === link.url ? 'bg-purple-600 hover:bg-purple-500 text-white' : 'text-gray-500 hover:bg-gray-400/20'">
+                    :class="current_router === link.url ? 'bg-teal-600 hover:bg-teal-500 text-white' : 'text-gray-500 hover:bg-gray-400/20'">
                     <div>
                         <component :is="link.icon" class="text-2xl" />
                     </div>
@@ -35,7 +35,7 @@
 import { admin_links } from '@/constants'
 import { BxSolidChevronRight, BxLogOut } from "@kalimahapps/vue-icons"
 
-const store = useAppStore()
+const token = useAuthData()
 const isOpen = ref(false)
 const route = useRoute()
 const router = useRouter()
@@ -45,7 +45,7 @@ const current_router = computed(() => {
 })
 
 const logout = () => {
-    store.set_token(null)
+    token.value = null
     router.push('/login')
 }
 </script>

@@ -3,7 +3,7 @@
         <div class="container px-2 md:px-8">
             <div class="min-h-[100vh] py-16 flex flex-col items-center">
                 <div class="text-center pt-20 pb-10">
-                    <h1 class="font-medium text-purple-600 text-3xl">О нас</h1>
+                    <h1 class="font-medium text-teal-600 text-3xl">О нас</h1>
                     <p class="text-base text-gray-600">
                         Добро пожаловать в нашей поликлинику — место, где ваша улыбка — наша забота.
                     </p>

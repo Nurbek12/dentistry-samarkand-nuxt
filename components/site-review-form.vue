@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-[600px] w-full bg-white p-4 border rounded">
         <div class="text-center mb-4">
-            <h1 class="font-medium text-xl text-purple-600">Заполните форму</h1>
+            <h1 class="font-medium text-xl text-teal-600">Заполните форму</h1>
         </div>
         <form @submit.prevent="send">
             <div class="flex flex-wrap justify-between gap-3">
@@ -18,7 +18,7 @@
                     <textarea required v-model="review.message" class="p-3 w-full outline-none text-sm resize-none" rows="4" type="text" placeholder="Отзыв" />
                 </div>
                 <div class="w-full">
-                    <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 w-full rounded">Отправить</button>
+                    <button :disabled="loading" type="submit" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white px-3 py-2 w-full rounded">Отправить</button>
                 </div>
             </div>
         </form>
@@ -38,8 +38,11 @@ const review = reactive({
 const send = async () => {
     loading.value = true
 
-    await sendReview(review)
-    alert('Successfully sended review!')
+    await $fetch('/api/reviews', {
+        method: 'POST',
+        body: JSON.stringify(review)
+    })
+    alert('Ваш вопрос успешно отправлено!')
     Object.assign(review, {
         firstname: '',
         lastname: '',
@@ -47,5 +50,6 @@ const send = async () => {
         email: '',
         message: ''
     })
+    loading.value = false
 }
 </script>

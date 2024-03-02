@@ -8,16 +8,16 @@
             <h1 class="font-medium">{{ doctor.name }}</h1>
             <h3 class="text-sm text-gray-600">{{ doctor.specialty }}</h3>
             <div class="mt-2 w-full flex justify-start gap-4">
-                <a v-for="sc,i in social_links" :key="i" :href="sc.url" class="text-gray-700 hover:text-purple-600">
+                <a v-for="sc,i in social_links" :key="i" :href="sc.url" class="text-gray-700 hover:text-teal-600">
                     <component :is="sc.icon" class="text-xl" />
                 </a>
             </div>
         </div>
     </div>
     <div class="mt-2 flex flex-1 flex-col gap-2">
-        <p class="text-purple-600 text-sm font-normal">{{ doctor.experience }}</p>
+        <p class="text-teal-600 text-sm font-normal">{{ doctor.experience }}</p>
         <p class="flex-1">{{ doctor.education }}</p>
-        <button @click="$emit('send-appointment', doctor.id)" class="bg-purple-600 hover:bg-purple-500 text-white w-full py-2 rounded">{{ $t('home.send_appointment') }}</button>
+        <button @click="$emit('send-appointment', doctor.id)" class="bg-teal-600 hover:bg-teal-500 text-white w-full py-2 rounded">{{ $t('home.send_appointment') }}</button>
     </div>
 </div>
 </template>

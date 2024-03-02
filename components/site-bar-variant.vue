@@ -8,7 +8,7 @@
                         <span class="lg:inline-block hidden text-base font-thin">{{ s.title }}</span>
                     </a>
                 </div> -->
-                <nuxt-link to="/" class="font-bold text-purple-600 text-xl">Сайт Стоматология</nuxt-link>
+                <nuxt-link to="/" class="font-bold text-teal-600 text-xl">Сайт Стоматология</nuxt-link>
                 <div class="flex gap-4 items-center">
                     <div class="flex gap-1 items-center text-gray-700 font-light text-sm">
                         <CaPhone class="h-4 w-4" />
@@ -18,18 +18,18 @@
                         <AkClock class="h-3 w-3" />
                         <span>Рабочее время: 9:00-18:00</span>
                     </div>
-                    <div class="flex gap-1 items-center text-gray-700 font-light text-sm hover:text-purple-600">
+                    <div class="flex gap-1 items-center text-gray-700 font-light text-sm hover:text-teal-600">
                         <BxMap class="h-4 w-4" />
                         <nuxt-link to="/">Областная стоматология</nuxt-link>
                     </div>
                 </div>
             </div>
-            <div class="flex justify-between items-center bg-purple-600 rounded p-2">
+            <div class="flex justify-between items-center bg-teal-800 rounded p-2">
                 <!-- <nuxt-link to="/" class="font-bold text-purple-600 text-xl">Сайт Стоматология</nuxt-link> -->
 
                 <div class="md:flex items-center gap-1 hidden">
                     <nuxt-link v-for="link,i in navigation_links" :key="i"
-                        :to="link.url" class="px-4 py-1 rounded" :class="route.path===link.url?'bg-white hover:underline text-purple-600 hover:bg-white hover:text-purple-600':'text-white hover:bg-white/20'">{{ link.title }}</nuxt-link>
+                        :to="link.url" class="px-4 py-1 rounded" :class="route.path===link.url?'bg-white hover:underline text-teal-600 hover:bg-white hover:text-teal-600':'text-white hover:bg-white/20'">{{ link.title }}</nuxt-link>
                     </div>
                 <app-lang-btn />
                 <button class="block md:hidden text-2xl" @click="$emit('open-drawer')">
