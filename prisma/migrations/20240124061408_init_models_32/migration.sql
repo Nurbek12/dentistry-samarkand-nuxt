@@ -1,8 +1,0 @@
--- CreateTable
-CREATE TABLE "Admin" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "login" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" DATETIME NOT NULL
-);

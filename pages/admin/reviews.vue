@@ -1,117 +1,52 @@
 <template>
     <div class="w-full p-2">
-        <div class="p-2 flex rounded bg-white border justify-between items-center gap-2">
-            <div class="border rounded overflow-hidden w-full max-w-[300px]">
-                <input @input="searchItems" type="text" class="px-3 py-2 w-full text-sm outline-none" placeholder="Поиск">
-            </div>
-        </div>
-        <div class="border w-full rounded overflow-hidden mt-2">
-            <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Имя и фамилия
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Отзыв
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Дата
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Удалить
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-show="items.length===0">
-                            <td class="px-3 py-2 text-center bg-white border-b" colspan="4">
-                                <span class="text-gray-600">Пусто</span>
-                            </td>
-                        </tr>
-                        <tr v-for="item,i in items" :key="i" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs">{{ item.firstname }} {{ item.lastname }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <p class="text-balance text-xs text-gray-600">
-                                    {{ item.message }}
-                                </p>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs">{{ new Date(item.created_at!).toLocaleString() }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="flex gap-1">
-                                    <button @click="publishItem(item.id!, i, !item.publish)" class="bg-teal-600 hover:bg-teal-500 disabled:bg-teal-900 text-white text-xs px-3 py-2 rounded">{{ item.publish?'Скрыть':'Публиковать' }}</button>
-                                    <button @click="deleteItem(item.id!, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
-                                </div>
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="py-2 flex items-center justify-between">
-            <div class="border rounded overflow-hidden w-full max-w-[100px]">
-                <select v-model="limit" @change="getItems()" class="px-3 py-2 w-full bg-white text-sm outline-none" placeholder="Поиск">
-                    <option :value="20" selected>20</option>
-                    <option :value="50">50</option>
-                    <option :value="100">100</option>
-                </select>
-            </div>
-            <div class="border rounded flex items-center justify-between gap-4 bg-white p-2">
-                <span class="text-sm">{{ limit*(page-1)+1 }}-{{ limit*(page-1)+items.length }} / {{ count }}</span>
-                <div class="flex items-center gap-2">
-                    <button :disabled="page===1" @click="page--,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
-                        <AkChevronLeft />
-                    </button>
-                    <button :disabled="page >= Math.ceil(count / limit)" @click="page++,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
-                        <AkChevronRight />
-                    </button>
+        <app-data-table
+            :count="count"
+            :items="items"
+            :headers="headers"
+            
+            @fetching="getItems">
+            <template #table-item-name="{tableItem}">
+                <span class="text-xs">{{ tableItem.firstname }} {{ tableItem.lastname }}</span>
+            </template>
+            <template #table-item-doctor="{tableItem}">
+                <span class="text-xs text-balance">{{ tableItem.doctor?.name || 'None'}}</span>
+            </template>
+            <template #table-item-created_at="{tableItem}">
+                <span class="text-xs text-balance">{{ new Date(tableItem.created_at!).toLocaleString() }}</span>
+            </template>
+            <template #table-item-actions="{tableItem,index}">
+                <div class="flex gap-1">
+                    <button @click="publishItem(tableItem.id!, index, !tableItem.publish)" class="bg-teal-600 hover:bg-teal-500 disabled:bg-teal-900 text-white text-xs px-3 py-2 rounded">{{ tableItem.publish?'Скрыть':'Публиковать' }}</button>
+                    <button @click="deleteItem(tableItem.id!, index)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
                 </div>
-            </div>
-        </div>
+            </template>
+        </app-data-table>
     </div>
 </template>
 
 <script setup lang="ts">
-import lodash from 'lodash'
 import type { Review } from '@/types'
-import { AkChevronRight, AkChevronLeft } from '@kalimahapps/vue-icons'
 
 definePageMeta({
   layout: 'admin-layout',
   middleware: ['auth'],
 })
 
-const { debounce } = lodash
-const items = ref<Review[]>([])
-const search = ref<string>('')
+const headers = [
+    { name: "ID", value: "id", sortable: true, balancedText: false, custom: false },
+    { name: "Имя и фамилия", value: "name", sortable: true, balancedText: false, custom: true },
+    { name: "Отзыв", value: "message", sortable: true, balancedText: false, custom: false },
+    { name: "Доктор?", value: "doctor", sortable: true, balancedText: false, custom: true },
+    { name: "Дата", value: "created_at", sortable: true, balancedText: false, custom: true },
+    { name: "Удалить", value: "actions", sortable: true, balancedText: false, custom: true },
+]
+
 const count = ref<number>(0)
-const page = ref<number>(1)
-const limit = ref<number>(20)
-const qs = computed(() => {
-    const qry: any = {}
+const items = ref<Review[]>([])
 
-    if (page.value) qry.page = page.value
-    if (limit.value) qry.limit = limit.value
-    if (search.value.trim()) qry.search = search.value
-
-    return qry
-})
-
-const searchItems = debounce((e: any) => {
-    search.value = e.target.value
-    page.value = 1
-    getItems()
-}, 500)
-
-const getItems = async () => {
-    const data = await $fetch(`/api/reviews`, {
-        params: qs.value
-    })
+const getItems = async (params: any) => {
+    const data = await $fetch(`/api/reviews`, { params })
     count.value = data.count
     items.value = data.result as any
 }
@@ -134,6 +69,4 @@ const publishItem = async (id: number, index: number, publish: boolean) => {
     console.log('check', id)
     Object.assign(items.value[index], { publish })
 }
-
-getItems()
 </script>

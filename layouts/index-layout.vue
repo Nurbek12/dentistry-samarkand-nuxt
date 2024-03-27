@@ -5,6 +5,7 @@
         <main class="min-h-[100vh]">
             <slot />
         </main>
+        <site-licesnces />
         <site-footer />
     </div>
 </template>

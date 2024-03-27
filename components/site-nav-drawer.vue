@@ -2,7 +2,7 @@
     <div class="fixed md:hidden w-[250px] h-[100vh] z-40 bg-white shadow-xl transition-all"
         :class="!drawer?'left-[-300px]':'left-0'">
         <div class="flex flex-col gap-4 p-10 h-full">
-            <nuxt-link v-for="link,i in navigation_links"
+            <nuxt-link v-for="link,i in navigation_links()"
                 :key="i" @click="$emit('close-drawer')"
                 :to="link.url" class="hover:underline" 
                 :class="{'text-teal-600 underline':route.path===link.url}">

@@ -1,10 +1,12 @@
 <template>
-    <div class="border rounded p-4">
+    <div class="pointer-events-auto bg-white border rounded-2xl px-6 py-4 max-w-[500px]">
         <h1 class="font-medium text-2xl text-teal-600">Контактная информация</h1>
         <div class="flex flex-col gap-4 py-4">
             <div class="flex flex-col md:flex-row gap-2 items-start">
-                <div class="w-[50px] h-[50px] rounded-full bg-teal-600/10 text-2xl flex items-center justify-center">
-                    <BxMap class="text-teal-600" />
+                <div>
+                    <div class="w-[50px] h-[50px] rounded-full bg-teal-600/10 text-2xl flex items-center justify-center">
+                        <BxMap class="text-teal-600" />
+                    </div>
                 </div>
                 <div>
                     <h1 class="font-medium">Название клиники: {{ contact_info.clinicName }}</h1>                
@@ -17,7 +19,7 @@
                 </div>
                 <div>
                     <h1 class="font-medium">Телефонные номера:</h1>                
-                    <span>{{ contact_info.phone_1 }}, {{ contact_info.phone_2 }}</span>
+                    <a :href="`tel:${contact_info.phone_1}`" class="hover:underline hover:text-teal-700">{{ contact_info.phone_1 }}</a>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-2 items-start">
@@ -25,8 +27,8 @@
                     <FeMail class="text-teal-600" />
                 </div>
                 <div>
-                    <h1 class="font-medium">Адрес электронной почты:</h1>                
-                    <span>{{ contact_info.email }}</span>
+                    <h1 class="font-medium">Адрес электронной почты:</h1>
+                    <a :href="`mailto:${contact_info.email}`" class="hover:underline hover:text-teal-700">{{ contact_info.email }}</a>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-2 items-start">
@@ -42,6 +44,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="w-full flex">
+                <nuxt-link to="/about/clinic" class="w-full text-center py-3 rounded-xl bg-teal-800 hover:bg-teal-700 text-white">
+                    Подробнее о клинике
+                </nuxt-link>
             </div>
         </div>
     </div>

@@ -1,113 +1,65 @@
 <template>
     <div class="w-full p-2">
-        <div class="p-2 rounded flex bg-white border justify-between items-center gap-2">
-            <div class="border rounded overflow-hidden w-full max-w-[300px]">
-                <input @input="searchItems" type="text" class="px-3 py-2 w-full text-sm outline-none" placeholder="Поиск">
-            </div>
-            <button @click="dialog=true" class="bg-teal-600 hover:bg-teal-500 text-white rounded text-xs px-3 py-2">Добавить</button>
-        </div>
-        <div class="border overflow-hidden w-full rounded mt-2">
-            <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Иконок
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Название
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Цена
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Описание
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Управлять
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-show="items.length===0">
-                            <td class="px-3 py-2 text-center bg-white border-b" colspan="5">
-                                <span class="text-gray-600">Пусто</span>
-                            </td>
-                        </tr>
-                        <tr v-for="item,i in items" :key="i" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="w-[40px] h-[40px] bg-teal-600/10 p-1 rounded overflow-hidden">
-                                    <img :src="item.icon||'/icons/crown.png'" alt="">
-                                </div>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs text-balance">{{ item.title }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs">{{ item.price }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs text-balance">{{ item.description }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="flex gap-1">
-                                    <button @click="update(i, { id: item.id, publish: !item.publish })" class="text-white text-xs px-3 py-2 rounded" :class="item.publish?'bg-green-500 hover:bg-green-400':'bg-red-500 hover:bg-red-400'">
-                                        <GlEye v-show="item.publish" class="w-4 h-4" />
-                                        <ChEyeSlash v-show="!item.publish" class="w-4 h-4" />
-                                    </button>
-                                    <button @click="editItem(item, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
-                                    <button @click="deleteItem(item.id!, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
-                                </div>
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="py-2 flex items-center justify-between">
-            <div class="border rounded overflow-hidden w-full max-w-[100px]">
-                <select v-model="limit" @change="getItems()" class="px-3 py-2 w-full bg-white text-sm outline-none" placeholder="Поиск">
-                    <option :value="20" selected>20</option>
-                    <option :value="50">50</option>
-                    <option :value="100">100</option>
-                </select>
-            </div>
-            <div class="border rounded flex items-center justify-between gap-4 bg-white p-2">
-                <span class="text-sm">{{ perpagetext }}</span>
-                <div class="flex items-center gap-2">
-                    <button :disabled="page===1" @click="page--,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
-                        <AkChevronLeft />
-                    </button>
-                    <button :disabled="page >= Math.ceil(count / limit)" @click="page++,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
-                        <AkChevronRight />
-                    </button>
+        <app-data-table
+            :count="count"
+            :items="items"
+            :headers="headers"
+
+            @fetching="getItems">
+            <template #table-top>
+                <div class="hidden lg:block"></div>
+                <div class="hidden lg:block"></div>
+                <button @click="dialog=true" class="bg-teal-600 hover:bg-teal-500 text-white rounded text-xs px-3 py-2">Добавить</button>
+            </template>
+            <template #table-item-image="{tableItem}">
+                <div class="w-[40px] h-[40px] rounded overflow-hidden">
+                    <img :src="tableItem.thumb||'/icons/crown.png'" class="w-full h-full object-cover" alt="">
                 </div>
-            </div>
-        </div>
+            </template>
+            <template #table-item-created_at="{tableItem}">
+                <span class="text-xs text-balance">{{ new Date(tableItem.created_at!).toLocaleString() }}</span>
+            </template>
+            <template #table-item-actions="{tableItem,index,openTr,isOpened}">
+                <div class="flex gap-1">
+                    <button @click="update(index, { id: tableItem.id, publish: !tableItem.publish })" class="text-white text-xs px-3 py-2 rounded" :class="tableItem.publish?'bg-green-500 hover:bg-green-400':'bg-red-500 hover:bg-red-400'">
+                        <GlEye v-show="tableItem.publish" class="w-4 h-4" />
+                        <ChEyeSlash v-show="!tableItem.publish" class="w-4 h-4" />
+                    </button>
+                    <button @click="editItem(tableItem, index)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
+                    <button @click="deleteItem(tableItem.id!, index)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
+                </div>
+            </template>
+        </app-data-table>
     </div>
-    <app-dialog :title="itemIndex==null?'Добавить услугу':'Изменить услугу'" :open="dialog" @close-dialog="close">
+    <app-dialog rounded :title="itemIndex==null?'Добавить услугу':'Изменить услугу'" :open="dialog" @close-dialog="close">
         <form @submit.prevent="save" class="mt-4 flex flex-col gap-4">
-            <div class="flex items-center justify-start">
-                <label for="file-input" class="cursor-pointer">
-                    <div class="w-[120px] h-[120px] border-2 hover:bg-teal-600/10 border-teal-600 p-1 overflow-hidden rounded-full">
-                        <img :src="currentImage" class="w-full rounded-full h-full object-cover" alt="">
+            <div class="flex items-center justify-start w-full">
+                <label for="file-input" class="cursor-pointer w-full">
+                    <div class="w-full h-[200px] border-2 hover:bg-teal-600/10 border-teal-600 p-1 overflow-hidden rounded">
+                        <img :src="currentImage" class="w-full rounded h-full object-contain" alt="">
                     </div>
                 </label>
             </div>
             <div class="w-full border overflow-hidden rounded">
-                <input required v-model="service.title" class="text-sm px-3 py-2 w-full outline-none" type="text" placeholder="Название">
+                <input required v-model="service.name_ru" class="text-sm px-3 py-2 w-full outline-none" type="text" placeholder="Название">
             </div>
             <div class="w-full border overflow-hidden rounded">
-                <input required v-model="service.title_uz" class="text-sm px-3 py-2 w-full outline-none" type="text" placeholder="Название (UZ)">
+                <input required v-model="service.name_uz" class="text-sm px-3 py-2 w-full outline-none" type="text" placeholder="Название (UZ)">
             </div>
             <div class="w-full border overflow-hidden rounded">
                 <input required v-model="service.price" class="text-sm px-3 py-2 w-full outline-none" type="number" min="0" placeholder="Цена">
             </div>
             <div class="w-full border overflow-hidden rounded">
-                <textarea required v-model="service.description" class="text-sm px-3 py-2 w-full outline-none resize-none" rows="4" type="text" placeholder="Описание" />
+                <textarea required v-model="service.description_ru" class="text-sm px-3 py-2 w-full outline-none resize-none" rows="4" type="text" placeholder="Описание" />
             </div>
             <div class="w-full border overflow-hidden rounded">
                 <textarea required v-model="service.description_uz" class="text-sm px-3 py-2 w-full outline-none resize-none" rows="4" type="text" placeholder="Описание (UZ)" />
+            </div>
+            <div class="w-full border overflow-hidden rounded">
+                <select required v-model="service.category_id" class="text-sm px-3 py-2 w-full outline-none resize-none">
+                    <option :value="null" disabled>Категория</option>
+                    <option v-for="c in categories" :value="c.id" :key="c.id">{{ c.name_ru }}</option>
+                </select>
             </div>
             <div class="w-full" hidden>
                 <input @change="onFileChange" id="file-input" accept="image/*" type="file" placeholder="Фото для ава">
@@ -120,64 +72,48 @@
 </template>
 
 <script setup lang="ts">
-import lodash from 'lodash'
-import type { Service } from '@/types'
-import { AkChevronRight, AkChevronLeft, ChEyeSlash, GlEye } from '@kalimahapps/vue-icons'
+import type { Service, Service_Category } from '@/types'
+import { ChEyeSlash, GlEye, FaAngleDown } from '@kalimahapps/vue-icons'
 
 definePageMeta({
   layout: 'admin-layout',
   middleware: ['auth'],
 })
 
-const { debounce } = lodash
-const search = ref('')
 const dialog = ref(false)
-const page = ref<number>(1)
 const file = ref<any>(null)
 const count = ref<number>(0)
-const limit = ref<number>(20)
 const items = ref<Service[]>([])
 const itemIndex = ref<number|null>(null)
 const createLoading = ref<boolean>(false)
+const categories = ref<Service_Category[]>([])
 const service = reactive<Service>({
-    description: "",
-    title: "",
-    title_uz: "",
-    price: "",
+    category_id: null,
+    description_ru: "",
     description_uz: "",
+    name_ru: "",
+    name_uz: "",
+    publish: false,
+    price: "" as any,
 })
+
+const headers = [
+    { name: "ID", value: "id", sortable: true, balancedText: false, custom: false },
+    { name: "Иконок", value: "image", sortable: true, balancedText: false, custom: true },
+    { name: "Название", value: "name_ru", sortable: true, balancedText: false, custom: false },
+    { name: "Цена", value: "price", sortable: true, balancedText: false, custom: false },
+    { name: "Дата", value: "created_at", sortable: true, balancedText: false, custom: true },
+    { name: "Управлять", value: "actions", sortable: true, balancedText: false, custom: true },
+]
 
 const currentImage = computed(() => {
     if(file.value) return URL.createObjectURL(file.value)
-    else if(itemIndex.value!==null) return items.value[itemIndex.value]?.icon || '/images/nophoto.jpg'
+    else if(itemIndex.value!==null) return items.value[itemIndex.value]?.image || '/images/nophoto.jpg'
     else return '/images/nophoto.jpg'
 })
 
-const qs = computed(() => {
-    const qry: any = {}
-
-    if (page.value) qry.page = page.value
-    if (limit.value) qry.limit = limit.value
-    if (search.value.trim()) qry.search = search.value
-
-    return qry
-})
-
-const perpagetext = computed(() => {
-    const page_1 = (page.value - 1) * limit.value;
-    return `${page_1 + 1}-${page_1 + items.value.length} / ${count.value}`
-})
-
-const searchItems = debounce((e: any) => {
-    search.value = e.target.value
-    page.value = 1
-    getItems()
-}, 500)
-
-const getItems = async () => {
-    const data = await $fetch(`/api/services`, {
-        params: qs.value
-    })
+const getItems = async (params: any) => {
+    const data = await $fetch(`/api/services`, { params })
     count.value = data.count
     console.log(data.count)
     items.value = data.result as any
@@ -229,33 +165,46 @@ const update = async (index: number, body: any) => {
 }
 
 const save = async () => {
-    createLoading.value = true
-
-    if(file.value) {
-        const { url } = await uploadImage(file.value)
-        service.icon = url
-    }
+    try {
+        createLoading.value = true
     
-    if(itemIndex.value !== null) update(itemIndex.value, service)
-        
-    else create(service)
+        if(file.value) {
+            const { url, thumbnailUrl } = await uploadImage(file.value)
+            service.image = url
+            service.thumb = thumbnailUrl
+        }
+    
+        if(itemIndex.value !== null) update(itemIndex.value, service)
+        else create(service)
 
-    createLoading.value = false
-    close()
+        close()
+    } catch (error) {
+        console.log(error)
+    } finally {
+        createLoading.value = false
+    }
 }
 
 const close = () => {
+    delete service.id
     Object.assign(service, {
-        description: "",
-        title: "",
-        price: "",
+        category_id: null,
+        description_ru: "",
         description_uz: "",
-        title_uz: "",
+        name_ru: "",
+        name_uz: "",
+        publish: false,
+        price: "" as any,
     })
     file.value = null
     dialog.value = false
     itemIndex.value = null
 }
 
-getItems()
+const init = async () => {
+    const data = await $fetch('/api/service-category', { params: { page: 1, limit: 1000 } })
+    categories.value = data.result as any
+}
+
+init()
 </script>

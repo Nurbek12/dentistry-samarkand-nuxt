@@ -19,14 +19,74 @@ import {
     FlFilledClipboardTaskListLtr,
     FaUsers,
     MdOutlinedWork,
+    GlStatusHealth,
+    GlBullhorn,
+    HuGift,
+    HeFilledDoctorFemale,
+    MiArticle,
+    AkImage,
+    MdOutlinedBiotech,
+    MdOutlinedCleanHands,
+    IcHealthShield,
+    MdOutlinedWindPower,
+    PhLightFaceMask,
+    HeOutlinePpeGloves,
+    HeOutlineFever,
+    IcWashingMachine,
+    CaClean,
+    ReNumber1,
+    ReNumber2,
+    ReNumber3,
+    ReNumber4,
+    BsNewspaper,
+    MdSharpBiotech,
+    BsImageFill,
+    BsFileEarmarkRichtextFill,
 } from '@kalimahapps/vue-icons'
 
-export const navigation_links = [
-    { title: 'Главная', url: '/', icon: 'mdi' },
-    { title: 'О нас', url: '/about', icon: 'mdi' },
-    { title: 'Услуги', url: '/services', icon: 'mdi' },
-    { title: 'Врачи', url: '/doctors', icon: 'mdi' },
-    { title: 'Контакты', url: '/contacts', icon: 'mdi' },
+export const navigation_links = (services?: any[], doctors?: any[]) => {
+    return [
+        { title: 'О нас', url: '/about',
+            children: [
+                { title: 'Меры профилактики и защити здоровья', url: '/about/preventation' },
+                { title: 'О Клинике', url: '/about' },
+                { title: 'Технологии и Оборудование', url: '/about/equipments' },
+                { title: 'Галарея', url: '/about/gallery' },
+                { title: 'Новости', url: '/about/news' },
+                { title: 'Статьи', url: '/about/articles' },
+                { title: 'Правовая информация', url: '/about/legal-info' },
+                { title: 'Обработка персональных данных', url: '/about/personal-data' },
+            ]
+        },
+        { title: 'Услуги', url: '/services',
+            children: services || []
+        },
+        { title: 'Врачи', url: '/doctors',
+            children: doctors || []
+        },
+        { title: 'Акции', url: '/stocks',  },
+        { title: 'Отзывы', url: '/reviews',  },
+        { title: 'Лаборатория', url: '/laboratory',  },
+        { title: 'Пациентам', url: '/for-patinets',  },
+        { title: 'Контакты', url: '/contacts', },
+    ]
+}
+
+export const admin_links = [
+    { title: 'Главная', icon: AkDashboard, url: '/admin' },
+    { title: 'Акции', icon: HuGift, url: '/admin/stocks' },
+    { title: 'Новости', icon: GlBullhorn, url: '/admin/news' },
+    { title: 'Записи на прием', icon: BsJournalText, url: '/admin/appointments' },
+    { title: 'Отзывы', icon: AkChatDots, url: '/admin/reviews' },
+    { title: 'Докторы', icon: HeFilledDoctorMale, url: '/admin/doctors' },
+    { title: 'Специализации', icon: MaDoctor, url: '/admin/specialities' },
+    { title: 'Услуги', icon: GlStatusHealth, url: '/admin/services' },
+    { title: 'Категория Услугов', icon: GlWork, url: '/admin/service-categories' },
+    { title: 'Лаборатория', icon: HeFilledDoctorFemale, url: '/admin/laboratory' },
+    { title: 'Галарея', icon: AkImage, url: '/admin/gallery' },
+    { title: 'Оборудование', icon: MdOutlinedBiotech, url: '/admin/equipments' },
+    { title: 'Статьи', icon: MiArticle, url: '/admin/articles' },
+    { title: 'Вопросы', icon: AkChatQuestion, url: '/admin/faqs' },
 ]
 
 export const social_links = [
@@ -50,7 +110,13 @@ export const faqs_links = [
 ]
 
 export const working_times = [
-    { title: '', }
+    { day: 'Понедельник', hours: '8:00-18:00' },
+    { day: 'Вторник', hours: '8:00-18:00' },
+    { day: 'Среда', hours: '8:00-18:00' },
+    { day: 'Четверг', hours: '8:00-18:00' },
+    { day: 'Пятница', hours: '8:00-18:00' },
+    { day: 'Shanba', hours: '8:00-13:00' },
+    { day: 'Воскресенье', sunday: true, hours: 'Выходной' },
 ]
 
 export const index_card_items = [
@@ -58,6 +124,55 @@ export const index_card_items = [
     { icon: MiSettingsCogCheck , title: 'home.card_title_2', description: 'home.card_desc_2' },
     { icon: CaNetwork1, title: 'home.card_title_3', description: 'home.card_desc_3' },
     { icon: ReStarSmileLine , title: 'home.card_title_4', description: 'home.card_desc_4' },
+]
+
+export const preventation_card_items = [
+    {
+        icon: IcHealthShield,
+        description: 'Каждый час выполняется дезинфекция всех помещений и поверхностей специальными безопасными дезинфектантами.',
+    },
+    {
+        icon: MdOutlinedWindPower,
+        description: 'Установлены дополнительные бактерицидные рециркуляторы воздуха, функционирующие безостановочно.',
+    },
+    {
+        icon: MdOutlinedCleanHands,
+        description: 'Во всех наших клиниках установлены дозаторы с дезинфицирующим средством широкого спектра действия для обработки рук.',
+    },
+    {
+        icon: HeOutlinePpeGloves,
+        description: 'Все сотрудники клиники используют одноразовые маски, которые мы меняем каждые 2 часа.',
+    },
+    {
+        icon: PhLightFaceMask,
+        description: 'Маски и индивидуальные средства защиты в вашем распоряжении.',
+    },
+    {
+        icon: CaClean,
+        description: 'После каждого пациента проводим усиленную обработку кабинетов дезинфицирующим раствором.',
+    },
+    {
+        icon: HeOutlineFever,
+        description: 'Все сотрудники перед работой, при входе в клинику, проходят обязательную термометрию.',
+    },
+    {
+        icon: IcWashingMachine,
+        description: 'Инструменты подвергаются многоступенчатой стерлизации.',
+    },
+]
+
+export const preventation_card_items_2 = [
+    { title: 'Пациент изолируется от других пациентов клиники и медицинского персонала.', icon: ReNumber1 },
+    { title: 'Административный персонал вызывает бригаду скорой медицинской помощи.', icon: ReNumber2 },
+    { title: 'Пациента госпитализируют с соблюдением всех мер безопасности через отдельный вход.', icon: ReNumber3 },
+    { title: 'В клинике проводится дополнительная дезинфекция.', icon: ReNumber4 },
+]
+
+export const about_page_links = [
+    { url: '/about/news', title: 'Новости', icon: BsNewspaper },
+    { url: '/about/gallery', title: 'Галерея', icon: MdSharpBiotech },
+    { url: '/about/equipments', title: 'Технологии и оборудование', icon: BsImageFill },
+    { url: '/about/personal-data', title: 'Обработка персональных данных', icon: BsFileEarmarkRichtextFill },
 ]
 
 export const service_cards = [
@@ -354,11 +469,11 @@ export const reviews = [
 ]
 
 export const contact_info = {
-    "clinicName": "Здоровые Улыбки",
+    "clinicName": "Областная Стоматологическая Больница",
     "icon": "dental-chair",
     "type": "Dentist",
     "address": {
-        "street": "Улица Стоматологическая, 123",
+        "street": "Узбекистан, Самаркандская область, 140100, Самарканд, ул. ОЗОД ШАРК, 10",
         "city": "Самарканд",
         "postalCode": "12345",
         "country": "Страна"
@@ -367,9 +482,9 @@ export const contact_info = {
         "latitude": 55.123456,
         "longitude": 37.987654
     },
-    "phone_1": "+7 (123) 456-7890",
-    "phone_2": "+998 (90) 123 45 67",
-    "email": "info@zdorovye-ulybki.com",
+    "phone_1": "+998 99 594 79 74",
+    // "phone_2": "+998 (90) 123 45 67",
+    "email": "shahlo.yuldasheva@minzrav.uz",
     "workingHours": [
         {
             "day": "Понедельник - Пятница",
@@ -385,15 +500,6 @@ export const contact_info = {
         }
     ]
 }
-
-export const admin_links = [
-    { title: 'Главная', icon: AkDashboard, url: '/admin' },
-    { title: 'Записи на прием', icon: BsJournalText, url: '/admin/appointments' },
-    { title: 'Отзывы', icon: AkChatDots, url: '/admin/reviews' },
-    { title: 'Докторы', icon: HeFilledDoctorMale, url: '/admin/doctors' },
-    { title: 'Услуги', icon: GlWork, url: '/admin/services' },
-    { title: 'Вопросы', icon: AkChatQuestion, url: '/admin/faqs' },
-]
 
 export const appointments = [
     {
@@ -488,4 +594,30 @@ export const dashboard_items = [
     { title: 'Докторы', value: 'doctors', icon: FaUsers, class: 'bg-blue-500/20 text-blue-500' },
     { title: 'Услуги', value: 'services', icon: MdOutlinedWork, class: 'bg-yellow-400/20 text-yellow-400' },
     { title: 'Отзывы', value: 'reviews', icon: GlCommentDots , class: 'bg-green-500/20 text-green-500' },
+]
+
+export const for_patient_links = [
+    { url: '#', title: 'Меры профилактики и защиты здоровья', icon: BsNewspaper },
+    { url: '#', title: 'Статьи', icon: BsNewspaper },
+    { url: '#', title: 'Заболевания', icon: BsNewspaper },
+    { url: '#', title: 'Услуги в кредит', icon: BsNewspaper },
+]
+
+export const patient_sections = [
+    { url: '#reception-of-patients', title: 'Прием пациентов', icon: '' },
+    { url: '#paperwork', title: 'Оформление документации', icon: '' },
+    { url: '#re-registration', title: 'Переоформление', icon: '' },
+    { url: '#discount-program', title: 'Дисконтная программа', icon: '' },
+    { url: '#standards-of-medical-care', title: 'Стандарты медицинской помощи', icon: '' },
+    { url: '#patients-insured-under-the-system', title: 'Пациенты, застрахованные по системе ДМС', icon: '' },
+    { url: '#late-for-an-appointment', title: 'Опоздание на прием', icon: '' },
+    { url: '#tax-deduction', title: 'Налоговый вычет', icon: '' },
+    { url: '#issuance-of-copies-of-medical-documentation', title: 'Выдача копий медицинской документации', icon: '' },
+]
+
+export const legal_info_sections = [
+    { url: '#reference-information', title: 'Справочная информация', icon: '' },
+    { url: '#licenses', title: 'Лицензии', icon: '' },
+    { url: '/about/personal-data#privacy-policy', title: 'Политика конфиденциальности', icon: '' },
+    { url: '/about/personal-data', title: 'Обработка персональных данных', icon: '' },
 ]

@@ -2,15 +2,15 @@
     <div class="w-full">
         <div class="flex items-center h-[100vh] bg-white">
             <div class="container px-2 md:px-8">
-                <div class="relative min-h-[60vh] flex items-center rounded w-full p-4 md:p-8 bg-teal-600">
+                <div class="relative min-h-[60vh] flex items-center rounded-3xl w-full p-4 md:p-8 bg-teal-600">
                     <app-home-carousel />
                     <div class="content max-w-full md:max-w-[600px] relative z-10 border-l-0 border-teal-600">
                         <h1 class="text-3xl text-white font-medium">{{ $t('home.title') }}</h1>
                         <p class="mt-4 text-base text-white">{{ $t('home.description') }}</p>
                         <!-- <div class="mt-4 text-gray-400 font-bold">Качественное лечение зубов по доступным ценам</div> -->
                         <div class="grid-cols-1 inline-grid sm:grid-cols-2 gap-2 mt-10">
-                            <button @click="openReview(null)" class="bg-white hover:bg-gray-50 text-teal-600 px-3 py-2 rounded">{{ $t('home.send_appointment') }}</button>
-                            <a class="border-2 border-white text-white text-center hover:bg-white hover:text-teal-600 px-3 py-2 rounded" href="#review-form">{{ $t('home.send_review') }}</a>
+                            <button @click="openReview(null)" class="bg-white hover:bg-gray-50 text-teal-600 px-3 py-2 rounded-3xl">{{ $t('home.send_appointment') }}</button>
+                            <a class="border-2 border-white text-white text-center hover:bg-white hover:text-teal-600 px-3 py-2 rounded-3xl" href="#review-form">{{ $t('home.send_review') }}</a>
                         </div>
                     </div>
                 </div>
@@ -18,9 +18,9 @@
         </div>
         <div>
             <div class="container px-2 md:px-8 pb-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 rounded overflow-hidden gap-[0.05rem] border bg-slate-200">
+                <card-items :items="index_card_items" :d="true" />
+                <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 rounded-2xl overflow-hidden gap-[0.05rem] border bg-slate-200">
                     <div v-for="item,i in index_card_items" :key="i" class="bg-white flex justify-start rounded items-center flex-col text-center p-4"> 
-                        <!--  :class="{'md:border-l-0 border-l':i>0}" -->
                         <div class="w-[80px] h-[80px] mb-2 rounded-full flex justify-center items-center bg-teal-600/10">
                             <component :is="item.icon" class="w-8 h-8 text-teal-600" />
                         </div>
@@ -28,7 +28,7 @@
                         <span class="">{{ $t(item.title) }}</span>
                         <p class="text-sm font-thin text-gray-600 mt-2">{{ $t(item.description) }}</p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="bg-gray-100">
@@ -63,10 +63,10 @@
                             Наши высококвалифицированные стоматологи предоставляют вам выдающуюся заботу о здоровье вашего улыбающегося лица. В [Название вашей клиники] мы сочетаем профессионализм с индивидуальным подходом, чтобы каждый пациент чувствовал себя уверенно и комфортно.
                         </p>
                         <br>
-                        <router-link to="/about" class="bg-teal-600 hover:bg-teal-500 text-white px-3 py-2 rounded">{{ $t('home.read_more') }}</router-link>
+                        <router-link to="/about" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded-3xl">{{ $t('home.read_more') }}</router-link>
                     </div>
-                    <div class="border rounded p-2">
-                        <nuxt-img src="/images/bg-2-image.jpg" class="rounded h-full w-[100%] object-cover" alt="" />
+                    <div class="border rounded-2xl p-2">
+                        <nuxt-img src="/images/bg-2-image.jpg" class="rounded-xl h-full w-[100%] object-cover" alt="" />
                     </div>
                 </div>
             </div>
@@ -86,17 +86,14 @@
         </div>
         <div>
             <div class="container px-2 md:px-8 py-16">
-                <div class="bg-teal-600 rounded flex items-stretch relative">
-                    <div class="w-full md:w-[50%] p-6">
+                <div class="bg-teal-600 rounded-2xl flex items-stretch relative">
+                    <div class="w-full p-6">
                         <h1 class="text-normal text-xl text-white">Задайте свой вопрос экспертам стоматологии</h1>
                         <p class="text-white text-balance mt-2">Заполните форму ниже, чтобы отправить свой вопрос. Мы постараемся ответить в кратчайшие сроки. Важно для нас, чтобы вы чувствовали себя уверенно и информированно в отношении вашего стоматологического здоровья.</p>
                         <form @submit.prevent="sendQuestion" class="flex flex-wrap justify-start items-center gap-2 mt-4">
-                            <input v-model="question_text" required name="title" type="text" class="rounded text-base border-2 bg-white py-2 px-4 outline-none font-thin" placeholder="Напишите вопрос">
-                            <button type="submit" class="rounded border-2 border-white text-white hover:bg-white hover:text-teal-600 px-4 py-2">Отправить вопрос</button>
+                            <input v-model="question_text" required name="title" type="text" class="rounded-3xl text-base border-2 bg-white py-2 px-4 outline-none font-thin" placeholder="Напишите вопрос">
+                            <button type="submit" class="rounded-3xl border-2 border-white text-white hover:bg-white hover:text-teal-600 px-4 py-2">Отправить вопрос</button>
                         </form>
-                    </div>
-                    <div class="absolute right-0 overflow-hidden hidden md:block w-[50%] h-full rounded-tl-full">
-                        <nuxt-img src="/images/bg-5-image.jpg" class=" w-full h-full object-cover" height="200" />
                     </div>
                 </div>
             </div>

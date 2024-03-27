@@ -1,10 +1,10 @@
 <template>
-    <div class="bg-black">
+    <div class="bg-teal-900">
         <div class="container px-2 md:px-8 py-4">
-            <div class="w-full py-4 border-b grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+            <div class="w-full py-4 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
                 <div class="flex flex-col items-start gap-3">
                     <p class="text-gray-300 text-sm">Карта сайта</p>
-                    <nuxt-link v-for="link,i in navigation_links" :key="i" :to="link.url"
+                    <nuxt-link v-for="link,i in navigation_links()" :key="i" :to="link.url"
                         class="text-white hover:underline">{{ link.title }}</nuxt-link>
                 </div>
                 <div class="flex flex-col items-start gap-3">
@@ -37,6 +37,9 @@
                     <p class="text-gray-300 text-sm">Свяжитесь с Нами</p>
                     <p class="text-white">Благодарим вас за посещение нашей поликлинике. Наши двери всегда открыты для вас, и мы готовы помочь вам достичь и поддержать здоровье вашей улыбки. Ниже вы найдете контактную информацию и ссылки на наши социальные сети.</p>
                 </div>
+            </div>
+            <div class="border-b text-white text-center">
+                ИМЕЮТСЯ ПРОТИВОПОКАЗАНИЯ. НЕОБХОДИМО ПРОКОНСУЛЬТИРОВАТЬСЯ СО СПЕЦИАЛИСТОМ
             </div>
             <div class="w-full pt-2 text-center text-thin text-gray-300">
                 <span>Ⓒ Самарканд областная стоматология - {{ new Date().getFullYear() }}</span>

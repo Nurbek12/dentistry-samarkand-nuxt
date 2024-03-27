@@ -27,11 +27,9 @@ export default defineEventHandler(async (event) => {
                     content_uz: {
                         contains: search
                     }
-                },
-                {
-                    publish: true
                 }
-            ]
+            ],
+            publish: true
         })
     else Object.assign(where, {
         publish: true

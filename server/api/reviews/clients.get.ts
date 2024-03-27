@@ -5,7 +5,8 @@ export default defineEventHandler(async (event) => {
     const page = query?.page || 1
     const limit = query?.limit || 12
     const search = query?.search
-    const where = {}
+    const where: any = {}
+    if(query?.doctor_id) where.doctor_id = query?.doctor_id
     if(search) Object.assign(where, {
             OR: [
                 {
@@ -22,11 +23,9 @@ export default defineEventHandler(async (event) => {
                     message: {
                         contains: search
                     }
-                },
-                {
-                    publish: true
                 }
-            ]
+            ],
+            publish: true
         })
     else Object.assign(where, {
         publish: true

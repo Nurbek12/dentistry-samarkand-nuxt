@@ -1,97 +1,38 @@
 <template>
     <div class="w-full p-2">
-        <div class="p-2 flex rounded bg-white border justify-between items-center gap-2">
-            <div class="border w-full rounded overflow-hidden max-w-[300px]">
-                <input @input="searchItems" type="text" class="px-3 py-2 w-full text-sm outline-none" placeholder="Поиск">
-            </div>
-            <button @click="dialog=true" class="bg-teal-600 hover:bg-teal-500 text-white rounded text-xs px-3 py-2">Добавить</button>
-        </div>
-        <div class="border rounded overflow-hidden w-full mt-2">
-            <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Фото
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Имя и фамилия
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Опыт
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Образование
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Специальность
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Управлять
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-show="items.length===0">
-                            <td class="px-3 py-2 text-center bg-white border-b" colspan="6">
-                                <span class="text-gray-600">Пусто</span>
-                            </td>
-                        </tr>
-                        <tr v-for="item,i in items" :key="i" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="w-[40px] h-[40px] rounded-full overflow-hidden">
-                                    <img :src="item.thumb||'/images/nophoto.jpg'" alt="">
-                                </div>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs">{{ item.name }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs text-balance">{{ item.experience }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs text-balance">{{ item.education }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <span class="text-xs">{{ item.specialty }}</span>
-                            </th>
-                            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="flex gap-1">
-                                    <button @click="update(i, { id: item.id, publish: !item.publish })" class="text-white text-xs px-3 py-2 rounded" :class="item.publish?'bg-green-500 hover:bg-green-400':'bg-red-500 hover:bg-red-400'">
-                                        <GlEye v-show="item.publish" class="w-4 h-4" />
-                                        <ChEyeSlash v-show="!item.publish" class="w-4 h-4" />
-                                    </button>
-                                    <button @click="editItem(item, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
-                                    <button @click="deleteItem(item.id!, i)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
-                                </div>
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="py-2 flex items-center justify-between">
-            <div class="border rounded overflow-hidden w-full max-w-[100px]">
-                <select v-model="limit" @change="getItems()" class="px-3 py-2 w-full bg-white text-sm outline-none" placeholder="Поиск">
-                    <option :value="20" selected>20</option>
-                    <option :value="50">50</option>
-                    <option :value="100">100</option>
-                </select>
-            </div>
-            <div class="border rounded flex items-center justify-between gap-4 bg-white p-2">
-                <span class="text-sm">{{ limit*(page-1)+1 }}-{{ limit*(page-1)+items.length }} / {{ count }}</span>
-                <div class="flex items-center gap-2">
-                    <button :disabled="page===1" @click="page--,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
-                        <AkChevronLeft />
-                    </button>
-                    <button :disabled="page >= Math.ceil(count / limit)" @click="page++,getItems()" class="disabled:bg-teal-900 bg-teal-600 hover:bg-teal-500 text-white text-xs p-3 rounded-full">
-                        <AkChevronRight />
-                    </button>
+        <app-data-table
+            :count="count"
+            :items="items"
+            :headers="headers"
+            
+            @fetching="getItems">
+            <template #table-top>
+                <div class="hidden lg:block"></div>
+                <div class="hidden lg:block"></div>
+                <button @click="dialog=true" class="bg-teal-600 hover:bg-teal-500 text-white rounded text-xs px-3 py-2">Добавить</button>
+            </template>
+            <template #table-item-image="{tableItem}">
+                <div class="w-[40px] h-[40px] rounded-full overflow-hidden">
+                    <img :src="tableItem.thumb||'/images/nophoto.jpg'" alt="">
                 </div>
-            </div>
-        </div>
+            </template>
+            <template #table-item-created_at="{tableItem}">
+                <span class="text-xs text-balance">{{ new Date(tableItem.created_at!).toLocaleString() }}</span>
+            </template>
+            <template #table-item-actions="{tableItem,index}">
+                <div class="flex gap-1">
+                    <button @click="update(index, { id: tableItem.id, publish: !tableItem.publish })" class="text-white text-xs px-3 py-2 rounded" :class="tableItem.publish?'bg-green-500 hover:bg-green-400':'bg-red-500 hover:bg-red-400'">
+                        <GlEye v-show="tableItem.publish" class="w-4 h-4" />
+                        <ChEyeSlash v-show="!tableItem.publish" class="w-4 h-4" />
+                    </button>
+                    <button @click="editItem(tableItem, index)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Изменить</button>
+                    <button @click="deleteItem(tableItem.id!, index)" class="bg-teal-600 hover:bg-teal-500 text-white text-xs px-3 py-2 rounded">Удалить</button>
+                </div>
+            </template>
+        </app-data-table>
     </div>
-    <app-dialog :title="itemIndex==null?'Добавить доктор':'Изменить доктор'" :open="dialog" @close-dialog="close">
+    
+    <app-dialog rounded :title="itemIndex==null?'Добавить доктор':'Изменить доктор'" :open="dialog" @close-dialog="close">
         <form @submit.prevent="save" class="mt-4 flex flex-col gap-4">
             <div class="flex items-center justify-start">
                 <label for="file-input" class="cursor-pointer">
@@ -113,9 +54,6 @@
                 <input required v-model="doctor.education" class="text-sm py-2 px-3 w-full outline-none" type="text" placeholder="Образование">
             </div>
             <div class="w-full border rounded overflow-hidden">
-                <input required v-model="doctor.specialty" class="text-sm py-2 px-3 w-full outline-none" type="text" placeholder="Специальность">
-            </div>
-            <div class="w-full border rounded overflow-hidden">
                 <input v-model="doctor.tg" class="text-sm py-2 px-3 w-full outline-none" type="text" placeholder="Telegram">
             </div>
             <div class="w-full border rounded overflow-hidden">
@@ -126,6 +64,13 @@
             </div>
             <div class="w-full border rounded overflow-hidden">
                 <input v-model="doctor.in" class="text-sm py-2 px-3 w-full outline-none" type="text" placeholder="Linkedin">
+            </div>
+            <div class="w-full h-full border rounded p-2">
+                <p class="mb-2">Специалисты</p>
+                <div v-for="s,i in speciality_list" :key="i" class="flex items-center gap-2">
+                    <input v-model="doctor.speciality_id" type="checkbox" :value="s.id" :id="`spec_item_${i}`">
+                    <label class="text-sm mb-0.5" :for="`spec_item_${i}`">{{ s.name_ru }}</label>
+                </div>
             </div>
             <div class="w-full" hidden>
                 <input @change="onFileChange" id="file-input" accept="image/*" type="file" placeholder="Фото для ава">
@@ -138,37 +83,46 @@
 </template>
 
 <script setup lang="ts">
-import lodash from 'lodash'
-import type { Doctor } from '@/types'
-import { AkChevronRight, AkChevronLeft, ChEyeSlash, GlEye } from '@kalimahapps/vue-icons'
+import type { Doctor, Specialty } from '@/types'
+import { ChEyeSlash, GlEye } from '@kalimahapps/vue-icons'
 
 definePageMeta({
   layout: 'admin-layout',
   middleware: ['auth'],
 })
 
-const { debounce } = lodash
-const search = ref('')
 const dialog = ref(false)
-const page = ref<number>(1)
 const file = ref<any>(null)
 const count = ref<number>(0)
-const limit = ref<number>(20)
 const items = ref<Doctor[]>([])
 const itemIndex = ref<number|null>(null)
 const createLoading = ref<boolean>(false)
+const speciality_list = ref<Specialty[]>([])
 const doctor = reactive<Doctor>({
     name: "",
     education: "",
     experience: "",
-    specialty: "",
+    rating: 0,
     fb: "",
     in: "",
     tg: "",
     inst: "",
     phone: "",
     publish: false,
+    content: '',
+    speciality_id: [],
 })
+                           
+const headers = [
+    { name: "ID", value: "id", sortable: true, balancedText: false, custom: false },
+    { name: "Фото", value: "image", sortable: true, balancedText: false, custom: true },
+    { name: "Имя и фамилия", value: "name", sortable: true, balancedText: false, custom: false },
+    { name: "Опыт", value: "experience", sortable: true, balancedText: false, custom: false },
+    { name: "Образование", value: "education", sortable: true, balancedText: false, custom: false },
+    // { name: "Специальность", value: "specialty", sortable: true, balancedText: false, custom: false },
+    { name: "Дата", value: "created_at", sortable: true, balancedText: false, custom: true },
+    { name: "Управлять", value: "actions", sortable: true, balancedText: false, custom: true },
+]
 
 const currentImage = computed(() => {
     if(file.value) return URL.createObjectURL(file.value)
@@ -176,27 +130,9 @@ const currentImage = computed(() => {
     else return '/images/nophoto.jpg'
 })
 
-const qs = computed(() => {
-    const qry: any = {}
-
-    if (page.value) qry.page = page.value
-    if (limit.value) qry.limit = limit.value
-    if (search.value.trim()) qry.search = search.value
-
-    return qry
-})
-
-const searchItems = debounce((e: any) => {
-    search.value = e.target.value
-    page.value = 1
-    getItems()
-}, 500)
-
-const getItems = async () => {
+const getItems = async (params: any) => {
     try {
-        const data = await $fetch(`/api/doctors`, {
-            params: qs.value
-        })
+        const data = await $fetch(`/api/doctors`, { params })
         items.value = data.result as any
         count.value = data.count
     } catch (error) {
@@ -266,11 +202,11 @@ const save = async () => {
 }
 
 const close = () => {
+    delete doctor.id
     Object.assign(doctor, {
         name: "",
         education: "",
         experience: "",
-        specialty: "",
         phone: "",
         image: "",
         thumb: "",
@@ -279,11 +215,17 @@ const close = () => {
         tg: "",
         inst: "",
         publish: false,
+        speciality_id: [],
     })
     file.value = null
     dialog.value = false
     itemIndex.value = null
 }
 
-getItems()
+const init = async () => {
+    const data = await $fetch('/api/speciality', { params: {page: 1, limit: 1000} })
+    speciality_list.value = data.result as any
+}
+
+init()
 </script>

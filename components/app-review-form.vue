@@ -1,15 +1,15 @@
 <template>
     <form @submit.prevent="send" class="mt-4 flex flex-col gap-4">
-        <div class="w-full border overflow-hidden rounded">
+        <div class="w-full border border-teal-700 overflow-hidden rounded-3xl">
             <input required v-model="appointment.name" class="text-sm px-3 py-2 w-full outline-none" type="text"
                 placeholder="Ваше имя">
         </div>
-        <div class="w-full border overflow-hidden rounded">
+        <div class="w-full border border-teal-700 overflow-hidden rounded-3xl">
             <input required v-model="appointment.phone" class="text-sm px-3 py-2 w-full outline-none" type="text"
                 placeholder="Телефон">
         </div>
         <button type="submit"
-            class="bg-teal-600 rounded hover:bg-teal-500 text-white text-sm px-3 py-2">Отправить</button>
+            class="bg-teal-600 rounded-3xl hover:bg-teal-500 text-white text-sm px-3 py-2">Отправить</button>
     </form>
 </template>
 

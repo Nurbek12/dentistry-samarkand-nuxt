@@ -1,3 +1,5 @@
+TODO remove labaratory add doctors labaratory field boolean
+
 [+] Add admin tables loading and no data
 [+] Check pagination
 [+] Send client only publish: true items
@@ -5,4 +7,6 @@
 [-] Add middlware server
 [+] Add Authencate
 
+[-] Need write back end
+[-] Need write admin
 [-] Need create components for DRY

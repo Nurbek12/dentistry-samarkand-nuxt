@@ -8,7 +8,7 @@
                 </p>
             </div>
             <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-                <site-service-card  v-for="item,i in services" :key="i" :item="item" />
+                <card-service-table v-for="s,i in services" :key="i" :data="s" />
             </div>
         </div>
     </div>
@@ -21,9 +21,11 @@ definePageMeta({
 
 const services = ref([])
 const init = async () => {
-    const data = await $fetch('/api/services/clients', {
+    const data = await $fetch('/api/service-category/clients', {
         params: { page: 1, limit: 12 }
     })
+    // console.log(data);
+    
     services.value = data.result as any
 }
 
